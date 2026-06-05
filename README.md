@@ -17,27 +17,29 @@ The site keeps the Barneys red/black/amber construction brand, uses Framer Motio
 - **Three.js** — custom Home hero construction/roofline scene.
 - **EmailJS** — client-side estimate/contact form sending.
 - **ESLint + Prettier** — code quality and formatting.
+- **pnpm** — faster, more reliable dependency installs and GitHub Actions builds.
 
 ---
 
 ## Quick Start
 
-Use Node **20.19+** or Node **22.12+**.
+Use Node **20.19+** or Node **22.12+**. This project now uses **pnpm** instead of npm for installs, scripts, and GitHub Pages deployment.
 
 ```bash
-npm install
-npm run dev
+corepack enable
+pnpm install
+pnpm dev
 ```
 
 Common commands:
 
 ```bash
-npm run dev          # Start local Vite dev server
-npm run lint         # Check code quality
-npm run build        # Create production build in dist/
-npm run preview      # Preview production build locally
-npm run format       # Format project files with Prettier
-npm run format:check # Check formatting without changing files
+pnpm dev          # Start local Vite dev server
+pnpm lint         # Check code quality
+pnpm build        # Create production build in dist/
+pnpm preview      # Preview production build locally
+pnpm format       # Format project files with Prettier
+pnpm format:check # Check formatting without changing files
 ```
 
 ---
@@ -66,7 +68,7 @@ VITE_EMAILJS_TEMPLATE_ID=
 VITE_EMAILJS_PUBLIC_KEY=
 ```
 
-- [ ] Test the Contact form locally with `npm run dev`.
+- [ ] Test the Contact form locally with `pnpm dev`.
 - [ ] Test the Contact form again after deployment.
 - [ ] Make sure EmailJS template fields match the code in `src/pages/contact/hooks/useEstimateForm.js`:
   - `from_name`
@@ -103,9 +105,9 @@ VITE_EMAILJS_PUBLIC_KEY=
 
 ### QA Before Going Live
 
-- [ ] Run `npm run lint`.
-- [ ] Run `npm run build`.
-- [ ] Run `npm run preview` and click every route.
+- [ ] Run `pnpm lint`.
+- [ ] Run `pnpm build`.
+- [ ] Run `pnpm preview` and click every route.
 - [ ] Test mobile nav on an actual phone, including right-center thumb trigger placement while scrolled.
 - [ ] Test phone landscape orientation to confirm the full-screen menu scrolls cleanly.
 - [ ] Test tablet portrait/landscape breakpoints.
@@ -543,31 +545,34 @@ The deployment workflow is:
 .github/workflows/deploy.yml
 ```
 
-It installs dependencies, builds the site, and deploys `dist/` to GitHub Pages.
+The workflow uses `pnpm/action-setup@v4`, Node 22, `pnpm install --no-frozen-lockfile`, and `pnpm run build`.
+
+It sets up pnpm, installs dependencies with `pnpm install --no-frozen-lockfile`, builds with `pnpm run build`, and deploys `dist/` to GitHub Pages. After you run `pnpm install` locally, commit the generated `pnpm-lock.yaml` for more repeatable installs. Once that lockfile is committed, you can optionally change the workflow install command to `pnpm install --frozen-lockfile` and add pnpm caching in `actions/setup-node`.
 
 ---
 
 ## Troubleshooting
 
-### `npm install` fails
+### `pnpm install` fails
 
 Try a clean install:
 
 ```bash
 rm -rf node_modules
-rm -f package-lock.json
-npm cache clean --force
-npm install
+rm -f pnpm-lock.yaml
+corepack enable
+pnpm store prune
+pnpm install
 ```
 
 Also check Node:
 
 ```bash
 node -v
-npm -v
+pnpm -v
 ```
 
-Use Node **20.19+** or **22.12+**.
+Use Node **20.19+** or **22.12+** and pnpm **10+**.
 
 ### Site is blank after deployment
 
@@ -615,11 +620,10 @@ Do not add full-size phone photos directly without compressing them first.
 Before pushing a production update:
 
 ```bash
-npm run format:check
-npm run lint
-npm run build
-npm run preview
+pnpm format:check
+pnpm lint
+pnpm build
+pnpm preview
 ```
 
 Then manually test the pages in the browser.
-# BarneysSupplyCompany

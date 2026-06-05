@@ -190,11 +190,11 @@ function About() {
                   clearly, and leave the property better protected than we found
                   it.
                 </p>
-                <div className="mt-8 flex items-center justify-center">
+                <div className="mt-18 flex items-center justify-center">
                   <img
                     src={PhoneNumbers}
                     alt="Barneys Supply Company phone numbers"
-                    className="w-[110px] object-contain drop-shadow-[0_14px_28px_rgba(0,0,0,.5)] sm:w-[125px]"
+                    className="w-[160px] object-contain drop-shadow-[0_14px_28px_rgba(0,0,0,.5)] sm:w-50"
                     loading="lazy"
                     decoding="async"
                   />
